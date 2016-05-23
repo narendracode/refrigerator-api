@@ -7,14 +7,14 @@ exports.deleteUser = function(req,res,next){
         if(err)
             res.json({type:false,err: 'error occured '+ err,'data':''});
 
-        res.json({type:true,data: 'user deleted successfully with email '+ req.body.email,err:''});
+        res.json({type:true,data: {msg:'user deleted successfully with email '+ req.body.email},err:''});
     });
 }
 
 exports.localSignup =  function(req, res, next){  
     passport.authenticate('local-signup',function(err, user, info){
         if (err) { 
-            return res.json({type:false,err: 'error occured '+ err,'data':''}); 
+            return res.json({type:false,err: 'error occured '+ err,'data':{}}); 
         }
         return res.json(user);
     })(req, res, next);
@@ -49,7 +49,7 @@ function parseToken(token){
 exports.localLogin = function(req, res, next){
     passport.authenticate('local-login',function(err, user, info){
         if (err) { 
-            return res.json({type:false,err: 'error occured '+ err,'data':''}); 
+            return res.json({type:false,err: 'error occured '+ err,'data':{}}); 
         }
         if(user){
             return res.json(user);
