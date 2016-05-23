@@ -17,7 +17,7 @@ exports.signupStrategy = new LocalStrategy({
                 return done(err);
             }
             if (user) {
-                return done(null, {type : false,data: 'Email is already taken.'});
+                return done(null, {type : false,err: 'Email is already taken.',data:''});
             } else {
                 var newUser  = new User();
                 newUser.role =  'user';
@@ -33,7 +33,7 @@ exports.signupStrategy = new LocalStrategy({
 
                     var token = jwt.sign({email: user.local.email, role : user.role}, cert, { algorithm: 'HS512'});             
 
-        return done(null, {type : true, 'token' : token});
+        return done(null, {type : true, 'data' : token,'err':''});
                 });   
             }
         });    
@@ -50,18 +50,18 @@ exports.loginStrategy = new LocalStrategy({
         var mUser = new User();
         User.findOne({'local.email': email}, function(err, user) {
             if (err){
-                return done(null,{type:false,data: 'error occured '+ err});
+                return done(null,{type:false,err: 'error occured '+ err,data:''});
             }
             if (!user) {
-                return done(null, {type: false, 'data': "Account doesn't exists with the email provided."});
+                return done(null, {type: false, 'err': "Account doesn't exists with the email provided.",'data':''});
             } 
             if(!user.validPassword(password)){
-                return done(null, {type: false, 'data': 'Password is wrong.'}); 
+                return done(null, {type: false, 'err': 'Password is wrong.','data':''}); 
             }
             
             var token = jwt.sign({email: user.local.email, role : user.role}, cert, { algorithm: 'HS512'});          
             
-            return done(null, {type : true, 'token' : token});
+            return done(null, {type : true, 'data' : token,'err':''});
         });    
     });
 });

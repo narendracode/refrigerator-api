@@ -3,19 +3,18 @@ var User  = require('../models/UserModel.js');
 
 
 exports.deleteUser = function(req,res,next){
-    console.log(" in delete user  email : "+req.body.email);
     User.remove({"local.email" : req.body.email},function(err){
         if(err)
-            res.json({type:false,data: 'error occured '+ err});
+            res.json({type:false,err: 'error occured '+ err,'data':''});
 
-        res.json({type:true,data: 'user deleted successfully with email '+ req.body.email});
+        res.json({type:true,data: 'user deleted successfully with email '+ req.body.email,err:''});
     });
 }
 
 exports.localSignup =  function(req, res, next){  
     passport.authenticate('local-signup',function(err, user, info){
         if (err) { 
-            return res.json({type:false,data: 'error occured '+ err}); 
+            return res.json({type:false,err: 'error occured '+ err,'data':''}); 
         }
         return res.json(user);
     })(req, res, next);
@@ -50,7 +49,7 @@ function parseToken(token){
 exports.localLogin = function(req, res, next){
     passport.authenticate('local-login',function(err, user, info){
         if (err) { 
-            return res.json({type:false,data: 'error occured '+ err}); 
+            return res.json({type:false,err: 'error occured '+ err,'data':''}); 
         }
         if(user){
             return res.json(user);
